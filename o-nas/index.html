@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA PUMPY | O nás</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* --- SDÍLENÉ STYLY --- */
+        :root { --bg-color: #0b0b0b; --text-color: #ffffff; --accent: #00f2ea; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); --alert: #ff4757; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+        /* NAVIGACE */
+        nav { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1400px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 50px; z-index: 100; }
+        .logo { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; color: white; text-decoration: none; z-index: 101; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.9rem; text-transform: uppercase; font-weight: 700; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        .cart-wrapper { position: relative; }
+        .cart-link { color: var(--accent); font-size: 1.2rem; }
+        .cart-count { position: absolute; top: -8px; right: -10px; background: red; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
+        .toggle-btn { display: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 101; }
+
+        /* Fullscreen Menu */
+        .dropdown_menu { position: fixed; top: 0; left: 0; width: 100%; height: 0; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px); z-index: 99; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: height 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .dropdown_menu.open { height: 100vh; }
+        .dropdown_menu a { color: white; font-family: 'Oswald', sans-serif; font-size: 3rem; text-decoration: none; text-transform: uppercase; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .dropdown_menu.open a { opacity: 1; transform: translateY(0); }
+        .dropdown_menu a:hover { color: var(--accent); -webkit-text-stroke: 1px var(--accent); }
+
+        /* --- ABOUT PAGE STYLES --- */
+        .page-header { height: 50vh; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; margin-top: 80px; }
+        .page-title { font-family: 'Oswald', sans-serif; font-size: 10vw; text-transform: uppercase; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.5); line-height: 0.9; }
+        .page-title.filled { color: white; -webkit-text-stroke: 0; }
+
+        /* TEAM GRID */
+        .team-section { padding: 50px 5%; max-width: 1400px; margin: 0 auto; }
+        .section-label { font-family: 'Oswald', sans-serif; font-size: 2rem; color: var(--accent); margin-bottom: 40px; text-transform: uppercase; text-align: center; letter-spacing: 2px; }
+
+        .team-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;
+        }
+
+        .member-card {
+            background: var(--glass); border: 1px solid var(--border); border-radius: 30px;
+            overflow: hidden; position: relative; height: 450px;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+        }
+
+        .member-card:hover { transform: translateY(-10px); border-color: var(--accent); }
+
+        .member-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.6s ease, filter 0.6s ease;
+            filter: grayscale(100%);
+        }
+
+        .member-card:hover .member-img { transform: scale(1.1); filter: grayscale(0%); }
+
+        .member-info {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 30px 20px; z-index: 2;
+        }
+
+        .member-info h2 { font-family: 'Oswald', sans-serif; font-size: 1.8rem; text-transform: uppercase; margin-bottom: 5px; }
+        .member-info h3 { color: var(--accent); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+        .member-info p { font-size: 0.85rem; color: #ccc; line-height: 1.4; opacity: 0.8; }
+
+        /* STORY SECTION (BENTO) */
+        .story-section { padding: 100px 5%; max-width: 1400px; margin: 0 auto; }
+        
+        .bento-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;
+        }
+
+        .bento-box {
+            background: var(--glass); border: 1px solid var(--border);
+            padding: 50px; border-radius: 30px; position: relative;
+        }
+
+        .bento-box h2 { font-family: 'Oswald', sans-serif; font-size: 3rem; margin-bottom: 20px; color: white; }
+        .bento-box p { color: #aaa; font-size: 1.1rem; line-height: 1.7; margin-bottom: 15px; }
+
+        .warning-box {
+            grid-column: span 2; text-align: center;
+            border: 1px solid var(--alert); background: rgba(255, 71, 87, 0.05);
+            display: flex; justify-content: center; align-items: center; gap: 15px;
+        }
+        
+        .warning-box p { color: var(--alert); font-weight: bold; margin: 0; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Footer */
+        .site-footer { border-top: 1px solid var(--border); padding: 50px; text-align: center; margin-top: 50px; background: #050505; color: gray; }
+        .site-footer p { margin-bottom: 10px; }
+        .site-footer a { color: gray; text-decoration: none; transition: 0.3s; }
+        .site-footer a:hover { color: var(--accent); }
+        .credit { margin-top: 20px; font-size: 0.8rem; }
+        .credit a { color: var(--accent); }
+
+        /* Responsivita */
+        @media (max-width: 1024px) {
+            .page-title { font-size: 15vw; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .warning-box { grid-column: span 1; }
+            .nav-links { display: none; }
+            .toggle-btn { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+
+    <nav>
+        <a href="/index.html" class="logo">SIGMA PUMPY</a>
+        <div class="nav-links">
+            <a href="/index.html">Domů</a>
+            <a href="/produkty/index.html">Produkty</a>
+            <a href="/kontakt/">Kontakt</a>
+            <a href="/o-nas/" class="active">O nás</a>
+            <div class="cart-wrapper">
+                <a href="/kosik/index.html" class="cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+        <div class="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="dropdown_menu">
+        <a href="/index.html">Domů</a>
+        <a href="/produkty/index.html">Produkty</a>
+        <a href="#">Kontakt</a>
+        <a href="/o-nas/">O nás</a>
+        <a href="/kosik/index.html">Košík (<span class="cart-count-mobile" id="cart-count-mobile">0</span>)</a>
+    </div>
+
+    <header class="page-header">
+        <h1 class="page-title">MEET THE</h1>
+        <h1 class="page-title filled">TEAM</h1>
+    </header>
+
+    <section class="team-section">
+        <h2 class="section-label">Executive Board</h2>
+        <div class="team-grid">
+            
+            <div class="member-card">
+                <img src="/img/maci.webp" alt="Matěj Vondráček" class="member-img">
+                <div class="member-info">
+                    <h3>Ředitel IT</h3>
+                    <h2>Matěj Vondráček</h2>
+                    <p>Nadšenec do IT, programování a tvorby webových stránek. Mozek celé operace.</p>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <img src="/img/studna.webp" alt="Tobias Studnička" class="member-img">
+                <div class="member-info">
+                    <h3>Ředitel Marketingu</h3>
+                    <h2>Tobias Studnička</h2>
+                    <p>Vizionář, který dostane Sigma Pumpy do každé domácnosti. Kreativní duše týmu.</p>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <img src="/img/jarda.webp" alt="Jaroslav Pátek" class="member-img">
+                <div class="member-info">
+                    <h3>Ředitel Výroby</h3>
+                    <h2>Jaroslav Pátek</h2>
+                    <p>Dohlíží na to, aby každá plechovka měla tu správnou energii. Přesnost je jeho druhé jméno.</p>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <img src="/img/ondrik.webp" alt="Ondřej Valnoha" class="member-img">
+                <div class="member-info">
+                    <h3>Ředitel Složení</h3>
+                    <h2>Ondřej Valnoha</h2>
+                    <p>Alchymista chutí. Stará se o to, aby Dact Energy nejen fungoval, ale i skvěle chutnal.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="story-section">
+        <div class="bento-grid">
+            <div class="bento-box">
+                <h2>VZNIK</h2>
+                <p>Firma Sigma Pumpy Industries vznikla na podzim roku 2024. Vše začalo jako ambiciózní nápad v hlavách čtyř studentů.</p>
+                <p>Byla založena na popud projektu "Ekonomický záměr" v hodinách Ekonomiky, ale rychle přerostla v něco víc - v posedlost čistou energií.</p>
+            </div>
+
+            <div class="bento-box">
+                <h2>MYŠLENKA</h2>
+                <p style="color: var(--accent); font-weight: bold;">PROČ ENERGETICKÉ NÁPOJE?</p>
+                <p>Naše přírodní energetické nápoje nabízejí zdravější alternativu k těm běžným, plným cukru a umělých látek.</p>
+                <p>Věříme, že přírodní ingredience poskytují energii bez negativních účinků. Podporujeme aktivní životní styl a zdraví našich zákazníků.</p>
+            </div>
+
+            <div class="bento-box warning-box">
+                <i class="fas fa-exclamation-triangle" style="color: var(--alert); font-size: 1.5rem;"></i>
+                <p>UPOZORNĚNÍ: JEDNÁ SE O ČISTĚ SMYŠLENOU FIRMU PRO ŠKOLNÍ ÚČELY</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div id="footer-content">
+            <p>© 2024 Sigma Pumpy Industries</p>
+            <a href="/cookies/"><p>Používáme soubory cookies</p></a>
+            <div class="credit">
+                <p>Created with ❤️ by <a href="https://martyc.eu">martyc.eu</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Header Animation
+        gsap.from(".page-title", { y: 100, opacity: 0, duration: 1.5, stagger: 0.2, ease: "power4.out" });
+
+        // Team Cards Animation
+        gsap.utils.toArray('.member-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: { trigger: card, start: "top 85%" },
+                y: 50, opacity: 0, duration: 0.8, delay: i * 0.1, ease: "power2.out"
+            });
+        });
+
+        // Story Animation
+        gsap.utils.toArray('.bento-box').forEach((box, i) => {
+            gsap.from(box, {
+                scrollTrigger: { trigger: box, start: "top 85%" },
+                y: 50, opacity: 0, duration: 0.8, ease: "power2.out"
+            });
+        });
+
+        // Menu Logic
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const toggleBtnIcon = document.querySelector('.toggle-btn i');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+            toggleBtnIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        }
+    </script>
+</body>
+</html>

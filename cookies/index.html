@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA PUMPY | Cookies</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* --- SDÍLENÉ STYLY --- */
+        :root { --bg-color: #0b0b0b; --text-color: #ffffff; --accent: #00f2ea; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+        /* NAVIGACE */
+        nav { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1400px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 50px; z-index: 100; }
+        .logo { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; color: white; text-decoration: none; z-index: 101; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.9rem; text-transform: uppercase; font-weight: 700; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        .cart-wrapper { position: relative; }
+        .cart-link { color: var(--accent); font-size: 1.2rem; }
+        .cart-count { position: absolute; top: -8px; right: -10px; background: red; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
+        .toggle-btn { display: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 101; }
+
+        /* Fullscreen Menu */
+        .dropdown_menu { position: fixed; top: 0; left: 0; width: 100%; height: 0; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px); z-index: 99; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: height 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .dropdown_menu.open { height: 100vh; }
+        .dropdown_menu a { color: white; font-family: 'Oswald', sans-serif; font-size: 3rem; text-decoration: none; text-transform: uppercase; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .dropdown_menu.open a { opacity: 1; transform: translateY(0); }
+        .dropdown_menu a:hover { color: var(--accent); -webkit-text-stroke: 1px var(--accent); }
+
+        /* --- LEGAL PAGE STYLES --- */
+        .page-header { height: 40vh; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; margin-top: 80px; }
+        .page-title { font-family: 'Oswald', sans-serif; font-size: 10vw; text-transform: uppercase; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.5); line-height: 0.9; }
+        .page-title.filled { color: white; -webkit-text-stroke: 0; }
+
+        .legal-section { padding: 50px 5%; max-width: 1200px; margin: 0 auto; }
+        
+        .legal-box {
+            background: var(--glass); border: 1px solid var(--border); border-radius: 30px;
+            padding: 40px; margin-bottom: 40px;
+        }
+
+        .legal-box h1 { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: white; margin-bottom: 20px; text-transform: uppercase; }
+        .legal-box h2 { font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: var(--accent); margin-top: 30px; margin-bottom: 15px; text-transform: uppercase; }
+        .legal-box h3 { font-size: 1.2rem; color: #fff; margin-top: 20px; margin-bottom: 10px; }
+        
+        .legal-box p { font-size: 1rem; line-height: 1.8; color: #ccc; margin-bottom: 15px; }
+        .legal-box b { color: white; }
+
+        /* Browser Buttons */
+        .browser-list { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .browser-btn {
+            padding: 10px 20px; border: 1px solid var(--border); border-radius: 20px;
+            color: white; text-decoration: none; font-weight: bold; transition: 0.3s;
+            background: rgba(255,255,255,0.05); display: flex; align-items: center; gap: 8px;
+        }
+        .browser-btn:hover { background: var(--accent); color: black; border-color: var(--accent); }
+
+        /* Footer */
+        .site-footer { border-top: 1px solid var(--border); padding: 50px; text-align: center; margin-top: 50px; background: #050505; color: gray; }
+        .site-footer p { margin-bottom: 10px; }
+        .site-footer a { color: gray; text-decoration: none; transition: 0.3s; }
+        .site-footer a:hover { color: var(--accent); }
+        .credit { margin-top: 20px; font-size: 0.8rem; }
+        .credit a { color: var(--accent); }
+
+        @media (max-width: 1024px) {
+            .page-title { font-size: 15vw; }
+            .nav-links { display: none; }
+            .toggle-btn { display: block; }
+            .legal-box { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+
+    <nav>
+        <a href="/index.html" class="logo">SIGMA PUMPY</a>
+        <div class="nav-links">
+            <a href="/index.html">Domů</a>
+            <a href="/produkty/index.html">Produkty</a>
+            <a href="/kontakt/index.html">Kontakt</a>
+            <a href="/o-nas/index.html">O nás</a>
+            <div class="cart-wrapper">
+                <a href="/kosik/index.html" class="cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+        <div class="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="dropdown_menu">
+        <a href="/index.html">Domů</a>
+        <a href="/produkty/index.html">Produkty</a>
+        <a href="/kontakt/index.html">Kontakt</a>
+        <a href="/o-nas/index.html">O nás</a>
+        <a href="/kosik/index.html">Košík (<span class="cart-count-mobile" id="cart-count-mobile">0</span>)</a>
+    </div>
+
+    <header class="page-header">
+        <h1 class="page-title">LEGAL</h1>
+        <h1 class="page-title filled">INFO</h1>
+    </header>
+
+    <section class="legal-section">
+        
+        <div class="legal-box">
+            <h1>Cookies</h1>
+            <p>Webové stránky využívají k přizpůsobení obsahu webu uživateli soubory cookies. Soubory cookies jsou malé množství dat, které se během návštěvy stránky ukládají ve Vašem prohlížeči.</p>
+            <p>Při opakované návštěvě webu jsou tato data odeslány prohlížečem zpět na web, který je zpracuje. To stránkám umožňuje rozlišovat jednotlivé uživatele bez nutnosti jejich přímé identifikace.</p>
+            
+            <h2>Používají se např. při:</h2>
+            <p><i class="fas fa-check" style="color: var(--accent)"></i> Zapamatování přihlašovacích údajů zákazníků</p>
+            <p><i class="fas fa-check" style="color: var(--accent)"></i> Nastavení správné funkčnosti webu (jazyk, zařízení)</p>
+            <p><i class="fas fa-check" style="color: var(--accent)"></i> Zpříjemnění užívání webu (nákupní košík)</p>
+
+            <h2>Typy Cookies</h2>
+            <p><b>Konverzní:</b> Analýza výkonu prodejních kanálů.</p>
+            <p><b>Remarketingové:</b> Personalizace obsahu reklam.</p>
+            <p><b>Esenciální:</b> Důležité pro základní funkčnost webu.</p>
+
+            <h2>Správa Cookies</h2>
+            <p>Nastavení používání souborů cookies lze provést v nastavení Vašeho webového prohlížeče:</p>
+            <div class="browser-list">
+                <a href="https://support.google.com/accounts/answer/61416?hl=cs" class="browser-btn"><i class="fab fa-chrome"></i> Chrome</a>
+                <a href="https://support.mozilla.org/cs/kb/rozsirena-ochrana-proti-sledovani-ve-firefoxu-pro-" class="browser-btn"><i class="fab fa-firefox"></i> Firefox</a>
+                <a href="https://support.microsoft.com/cs-cz/windows" class="browser-btn"><i class="fab fa-edge"></i> Edge</a>
+                <a href="#" class="browser-btn"><i class="fab fa-android"></i> Android</a>
+            </div>
+            <p style="margin-top: 20px;">Více informací na <a href="https://www.youronlinechoices.com/cz/" style="color: var(--accent);">YourOnlineChoices.com</a></p>
+        </div>
+
+        <div class="legal-box">
+            <h1>Politika ochrany osobních údajů</h1>
+            <h3>Platné od 25.5.2018</h3>
+            <p>Webové stránky využívají pouze ty Zpracovatele, kteří poskytují dostatečné záruky a zavedli vhodná technická a organizační opatření pro zajištění splnění požadavků Nařízení (GDPR).</p>
+
+            <h2>Zpracování na základě souhlasu</h2>
+            <p>Na základě Vašeho souhlasu zpracováváme: Jméno a příjmení, dodací adresu, telefon, e-mail, data objednávek. Data zpracováváme pro účely cílené komunikace.</p>
+
+            <h2>Legislativní požadavky</h2>
+            <p>Pro účely plnění legislativních požadavků (účetnictví, daně) zpracováváme data po dobu 10 let.</p>
+            
+            <p style="margin-top: 20px; color: var(--accent);">Naše služby jsou určeny pro osoby starší 16 let.</p>
+        </div>
+
+    </section>
+
+    <footer class="site-footer">
+        <div id="footer-content">
+            <p>© 2024 Sigma Pumpy Industries</p>
+            <a href="/cookies/"><p>Používáme soubory cookies</p></a>
+            <div class="credit">
+                <p>Created with ❤️ by <a href="https://martyc.eu">martyc.eu</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.from(".page-title", { y: 100, opacity: 0, duration: 1.5, stagger: 0.2, ease: "power4.out" });
+
+        gsap.utils.toArray('.legal-box').forEach((box, i) => {
+            gsap.from(box, {
+                scrollTrigger: { trigger: box, start: "top 90%" },
+                y: 50, opacity: 0, duration: 0.8, ease: "power2.out"
+            });
+        });
+
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const toggleBtnIcon = document.querySelector('.toggle-btn i');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+            toggleBtnIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        }
+    </script>
+</body>
+</html>

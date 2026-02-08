@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA PUMPY | Produkty</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root { --bg-color: #0b0b0b; --text-color: #ffffff; --accent: #00f2ea; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+        /* NAVIGACE */
+        nav { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1400px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 50px; z-index: 100; }
+        .logo { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; color: white; text-decoration: none; z-index: 101;}
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.9rem; text-transform: uppercase; font-weight: 700; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        .toggle-btn { display: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 101; }
+
+        /* MENU */
+        .dropdown_menu { position: fixed; top: 0; left: 0; width: 100%; height: 0; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px); z-index: 99; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: height 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .dropdown_menu.open { height: 100vh; }
+        .dropdown_menu a { color: white; font-family: 'Oswald', sans-serif; font-size: 3rem; text-decoration: none; text-transform: uppercase; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .dropdown_menu.open a { opacity: 1; transform: translateY(0); }
+        .dropdown_menu a:hover { color: var(--accent); -webkit-text-stroke: 1px var(--accent); }
+
+        /* PRODUKTY */
+        .page-header { height: 60vh; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
+        .page-title { font-family: 'Oswald', sans-serif; font-size: 8vw; text-transform: uppercase; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.5); margin-bottom: 20px; }
+        .showcase-container { max-width: 1400px; margin: 0 auto; padding-bottom: 100px; }
+        .product-section { display: flex; align-items: center; justify-content: space-between; min-height: 80vh; padding: 50px 5%; border-bottom: 1px solid var(--border); }
+        .product-section:nth-child(even) { flex-direction: row-reverse; }
+        .p-info { flex: 1; padding: 40px; z-index: 2; }
+        .p-info h2 { font-family: 'Oswald', sans-serif; font-size: 4rem; text-transform: uppercase; margin-bottom: 20px; line-height: 1; }
+        .p-info p { color: #aaa; font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px; max-width: 500px; }
+        .price-tag { font-size: 2.5rem; color: var(--accent); font-weight: 800; display: block; margin-bottom: 30px; text-shadow: 0 0 20px rgba(0, 242, 234, 0.3); }
+        .btn-buy { padding: 15px 40px; background: transparent; border: 1px solid var(--accent); color: var(--accent); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
+        .btn-buy:hover { background: var(--accent); color: black; box-shadow: 0 0 30px rgba(0, 242, 234, 0.4); }
+        .p-image { flex: 1; display: flex; justify-content: center; align-items: center; perspective: 1000px; }
+        .tilt-card { width: 100%; max-width: 400px; height: 500px; background: radial-gradient(circle at center, rgba(0, 242, 234, 0.1), transparent 70%); display: flex; justify-content: center; align-items: center; border-radius: 30px; border: 1px solid var(--border); background-color: rgba(255,255,255,0.02); transition: transform 0.1s; }
+        .tilt-card img { width: 80%; height: auto; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5)); transition: transform 0.5s; }
+        .tilt-card:hover img { transform: scale(1.1) translateY(-20px); }
+
+        /* FOOTER (OPRAVENO) */
+        .site-footer { border-top: 1px solid var(--border); padding: 50px; text-align: center; margin-top: 50px; background: #050505; color: gray; }
+        .site-footer p { margin-bottom: 10px; }
+        .site-footer a { color: gray; text-decoration: none; transition: 0.3s; }
+        .site-footer a:hover { color: var(--accent); }
+        .credit { margin-top: 20px; font-size: 0.8rem; }
+        .credit a { color: var(--accent); }
+
+        @media (max-width: 1024px) {
+            .product-section, .product-section:nth-child(even) { flex-direction: column-reverse; text-align: center; }
+            .p-info { padding: 20px; display: flex; flex-direction: column; align-items: center; }
+            .p-info h2 { font-size: 3rem; }
+            .tilt-card { height: 350px; margin-bottom: 30px; }
+            .page-title { font-size: 15vw; }
+            .nav-links { display: none; }
+            .toggle-btn { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+
+    <nav>
+        <a href="/index.html" class="logo">SIGMA PUMPY</a>
+        <div class="nav-links">
+            <a href="/index.html">Domů</a>
+            <a href="/produkty/index.html" class="active">Produkty</a>
+            <a href="#">Kontakt</a>
+            <a href="#">O nás</a>
+            <a href="#" style="color: var(--accent);"><i class="fas fa-shopping-cart"></i></a>
+        </div>
+        <div class="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="dropdown_menu">
+        <a href="/index.html">Domů</a>
+        <a href="/produkty/index.html">Produkty</a>
+        <a href="/kontakt/">Kontakt</a>
+        <a href="/o-nas/">O nás</a>
+        <a href="/kosik/index.html">Košík</a>
+    </div>
+
+    <header class="page-header">
+        <h1 class="page-title">CHOOSE YOUR</h1>
+        <h1 class="page-title" style="color: white; -webkit-text-stroke: 0;">FUEL</h1>
+    </header>
+
+    <div class="showcase-container">
+        
+        <div class="product-section">
+            <div class="p-info">
+                <span style="color: var(--accent); letter-spacing: 2px;">BESTSELLER</span>
+                <h2>DACT ENERGY</h2>
+                <p>Když ti dochází dech, Dact ti dá křídla. Čistá energie bez cukru.</p>
+                <span class="price-tag">40 Kč</span>
+                <a href="dactenergy/index.html"><button class="btn-buy">Detail produktu</button></a>
+            </div>
+            <div class="p-image">
+                <div class="tilt-card" data-tilt>
+                    <img src="/img/12oz Can-2.webp" alt="Dact Energy">
+                </div>
+            </div>
+        </div>
+
+        <div class="product-section">
+            <div class="p-info">
+                <span style="color: var(--accent); letter-spacing: 2px;">POWDER EDITION</span>
+                <h2>DACT FUEL</h2>
+                <p>Rozpustná verze našeho legendárního drinku.</p>
+                <span class="price-tag">350 Kč</span>
+                <a href="dactfuel/index.html"><button class="btn-buy">Detail produktu</button></a>
+            </div>
+            <div class="p-image">
+                <div class="tilt-card" data-tilt>
+                    <img src="/img/doypack.webp" alt="Dact Fuel">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="site-footer">
+        <div id="footer-content">
+            <p>© 2024 Sigma Pumpy Industries</p>
+            <a href="/cookies/"><p>Používáme soubory cookies</p></a>
+            <div class="credit">
+                <p>Created with ❤️ by <a href="https://martyc.eu">martyc.eu</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from(".page-title", { y: 100, opacity: 0, duration: 1, stagger: 0.2, ease: "power4.out" });
+
+        const sections = document.querySelectorAll('.product-section');
+        sections.forEach(section => {
+            gsap.from(section.querySelector('.p-info'), { scrollTrigger: { trigger: section, start: "top 70%", }, x: -50, opacity: 0, duration: 1, ease: "power2.out" });
+            gsap.from(section.querySelector('.p-image'), { scrollTrigger: { trigger: section, start: "top 70%", }, scale: 0.8, opacity: 0, duration: 1, ease: "back.out(1.7)" });
+        });
+
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                const centerX = rect.width / 2; const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -10; const rotateY = ((x - centerX) / centerX) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            card.addEventListener('mouseleave', () => { card.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`; });
+        });
+
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const toggleBtnIcon = document.querySelector('.toggle-btn i');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+            toggleBtnIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        }
+    </script>
+</body>
+</html>

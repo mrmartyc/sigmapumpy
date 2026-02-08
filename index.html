@@ -1,10 +1,170 @@
 <!DOCTYPE html>
-<html>
+<html lang="cs">
 <head>
-    <meta http-equiv="refresh" content="0; URL=/domu/">
-    <title>Přesměrování...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA PUMPY | Vítejte</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root { --bg-color: #0b0b0b; --text-color: #ffffff; --accent: #00f2ea; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+        /* NAVIGACE */
+        nav { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1400px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 50px; z-index: 100; }
+        .logo { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; color: white; text-decoration: none; z-index: 101; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.9rem; text-transform: uppercase; font-weight: 700; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        .toggle-btn { display: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 101; }
+
+        /* FULLSCREEN MENU */
+        .dropdown_menu { position: fixed; top: 0; left: 0; width: 100%; height: 0; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px); z-index: 99; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: height 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .dropdown_menu.open { height: 100vh; }
+        .dropdown_menu a { color: white; font-family: 'Oswald', sans-serif; font-size: 3rem; text-decoration: none; text-transform: uppercase; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .dropdown_menu.open a { opacity: 1; transform: translateY(0); }
+        .dropdown_menu a:hover { color: var(--accent); -webkit-text-stroke: 1px var(--accent); }
+
+        /* HERO */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; padding-top: 80px; }
+        .big-type { font-family: 'Oswald', sans-serif; font-size: 14vw; line-height: 0.8; font-weight: 700; text-transform: uppercase; text-align: center; z-index: 1; position: relative; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.2); transition: 0.5s; }
+        .big-type.filled { color: white; -webkit-text-stroke: 0; }
+        .hero-img-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30vw; z-index: 2; pointer-events: none; }
+        .hero-img-container img { width: 100%; height: auto; filter: drop-shadow(0 0 50px rgba(0, 242, 234, 0.2)); }
+        .scroll-down { position: absolute; bottom: 40px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); animation: bounce 2s infinite; }
+
+        /* BENTO GRID */
+        .section-padding { padding: 100px 5%; max-width: 1600px; margin: 0 auto; }
+        .grid-header { font-size: 4rem; margin-bottom: 50px; text-transform: uppercase; font-family: 'Oswald', sans-serif; color: white; }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 350px); gap: 20px; }
+        .bento-item { background: var(--glass); border: 1px solid var(--border); border-radius: 30px; overflow: hidden; position: relative; transition: transform 0.4s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; }
+        .bento-item:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255, 255, 255, 0.08); }
+        .large { grid-column: span 2; grid-row: span 2; } .wide { grid-column: span 2; } .tall { grid-row: span 2; }
+        .bento-content { z-index: 2; position: relative; }
+        .bento-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: 0.5s; z-index: 1; }
+        .bento-item:hover .bento-bg { transform: scale(1.1); opacity: 0.4; }
+        .bento-tag { background: var(--accent); color: black; padding: 5px 10px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+        .bento-item h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; text-transform: uppercase; }
+
+        /* FOOTER (OPRAVENO) */
+        .site-footer { border-top: 1px solid var(--border); padding: 50px; text-align: center; margin-top: 50px; background: #050505; color: gray; }
+        .site-footer p { margin-bottom: 10px; }
+        .site-footer a { color: gray; text-decoration: none; transition: 0.3s; }
+        .site-footer a:hover { color: var(--accent); }
+        .credit { margin-top: 20px; font-size: 0.8rem; }
+        .credit a { color: var(--accent); }
+
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .large, .wide, .tall { grid-column: span 1; grid-row: auto; height: 300px; }
+            .big-type { font-size: 18vw; }
+            .hero-img-container { width: 60vw; }
+            nav { width: 95%; padding: 15px 25px; }
+            .nav-links { display: none; }
+            .toggle-btn { display: block; }
+        }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+    </style>
 </head>
 <body>
-    <p>Přesměrovávám na<a href="/domu/">Domů</a>...</p>
+
+    <div class="noise-overlay"></div>
+
+    <nav>
+        <a href="index.html" class="logo">SIGMA PUMPY</a>
+        <div class="nav-links">
+            <a href="index.html" class="active">Domů</a>
+            <a href="produkty/index.html">Produkty</a>
+            <a href="/kontakt/">Kontakt</a>
+            <a href="/o-nas/>O nás</a>
+            <a href="/kosik/" style="color: var(--accent);"><i class="fas fa-shopping-cart"></i></a>
+        </div>
+        <div class="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="dropdown_menu">
+        <a href="index.html">Domů</a>
+        <a href="produkty/index.html">Produkty</a>
+        <a href="/kontakt/">Kontakt</a>
+        <a href="/o-nas/">O nás</a>
+        <a href="/kosik/">Košík</a>
+    </div>
+
+    <header class="hero">
+        <div class="big-type">SIGMA</div>
+        <div class="hero-img-container" id="heroCan">
+            <img src="/img/transparent_image.webp" alt="Sigma Pumpy Drink">
+        </div>
+        <div class="big-type filled">PUMPY</div>
+        <div class="scroll-down">Scrolluj dolů <i class="fas fa-chevron-down"></i></div>
+    </header>
+
+    <section class="section-padding">
+        <h2 class="grid-header">Trending Now</h2>
+        <div class="bento-grid">
+            <div class="bento-item large">
+                <img src="/img/f1.webp" class="bento-bg" alt="F1">
+                <div class="bento-content"><span class="bento-tag">F1 Racing</span><h3>Pódium na Grand Prix</h3><p>Jaroslav Pátek a jeho legendární jízda.</p></div>
+            </div>
+            <div class="bento-item">
+                <img src="/img/doypack.webp" class="bento-bg" alt="Fuel">
+                <div class="bento-content"><span class="bento-tag">Novinka</span><h3>Dact Fuel</h3></div>
+            </div>
+            <div class="bento-item tall">
+                <img src="/img/psg.webp" class="bento-bg" alt="PSG">
+                <div class="bento-content"><span class="bento-tag">Přestup</span><h3>Valnoha do PSG</h3><p>Z přímáku trefil holuba, pak dal gól.</p></div>
+            </div>
+            <div class="bento-item wide">
+                <img src="/img/busgp.webp" class="bento-bg" alt="Bus">
+                <div class="bento-content"><span class="bento-tag">Crazy</span><h3>Bangladéš GP</h3><p>Závod autobusů bez pravidel.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div id="footer-content">
+            <p>© 2024 Sigma Pumpy Industries</p>
+            <a href="/cookies/"><p>Používáme soubory cookies</p></a>
+            <div class="credit">
+                <p>Created with ❤️ by <a href="https://martyc.eu">martyc.eu</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from(".big-type", { y: 100, opacity: 0, duration: 1.5, stagger: 0.2, ease: "power4.out" });
+        gsap.to("#heroCan", { scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }, y: 200, rotation: 10 });
+        gsap.to(".big-type:first-child", { scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom center", scrub: 1 }, x: -100, opacity: 0.2 });
+        gsap.to(".big-type.filled", { scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom center", scrub: 1 }, x: 100, opacity: 0.2 });
+        gsap.utils.toArray('.bento-item').forEach((item, i) => {
+            gsap.from(item, { scrollTrigger: { trigger: item, start: "top 85%", toggleActions: "play none none reverse" }, y: 50, opacity: 0, duration: 0.8, ease: "power2.out" });
+        });
+
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const toggleBtnIcon = document.querySelector('.toggle-btn i');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+            toggleBtnIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        }
+    </script>
 </body>
 </html>

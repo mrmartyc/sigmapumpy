@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA PUMPY | Kontakt</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script type="module" src="/kosik/kosik.js"></script>
+
+    <style>
+        /* --- SDÍLENÉ STYLY --- */
+        :root { --bg-color: #0b0b0b; --text-color: #ffffff; --accent: #00f2ea; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+        /* NAVIGACE */
+        nav { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1400px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 50px; z-index: 100; }
+        .logo { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; color: white; text-decoration: none; z-index: 101; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.9rem; text-transform: uppercase; font-weight: 700; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        .cart-wrapper { position: relative; }
+        .cart-link { color: var(--accent); font-size: 1.2rem; }
+        .cart-count { position: absolute; top: -8px; right: -10px; background: red; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
+        .toggle-btn { display: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 101; }
+
+        /* Fullscreen Menu */
+        .dropdown_menu { position: fixed; top: 0; left: 0; width: 100%; height: 0; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px); z-index: 99; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: height 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .dropdown_menu.open { height: 100vh; }
+        .dropdown_menu a { color: white; font-family: 'Oswald', sans-serif; font-size: 3rem; text-decoration: none; text-transform: uppercase; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .dropdown_menu.open a { opacity: 1; transform: translateY(0); }
+        .dropdown_menu a:hover { color: var(--accent); -webkit-text-stroke: 1px var(--accent); }
+
+        /* --- CONTACT STYLES --- */
+        .page-header { height: 40vh; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; margin-top: 80px; }
+        .page-title { font-family: 'Oswald', sans-serif; font-size: 10vw; text-transform: uppercase; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.5); line-height: 0.9; }
+        .page-title.filled { color: white; -webkit-text-stroke: 0; }
+
+        .contact-container { padding: 50px 5%; max-width: 1400px; margin: 0 auto; }
+
+        /* BENTO GRID PRO KONTAKT */
+        .contact-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;
+        }
+
+        .contact-box {
+            background: var(--glass); border: 1px solid var(--border); border-radius: 30px;
+            padding: 40px; display: flex; flex-direction: column; justify-content: center;
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+
+        .contact-box:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); transform: translateY(-5px); }
+
+        .contact-box h2 { font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: #aaa; margin-bottom: 10px; text-transform: uppercase; }
+        .contact-box a, .contact-box p { color: white; font-size: 1.3rem; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .contact-box a:hover { color: var(--accent); }
+        .contact-icon { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
+
+        /* Full width pro mapu */
+        .map-box { grid-column: span 2; height: 500px; padding: 0; overflow: hidden; }
+        .map-box iframe { width: 100%; height: 100%; border: none; filter: grayscale(100%) invert(92%) contrast(83%); opacity: 0.8; transition: 0.5s; }
+        .map-box:hover iframe { filter: grayscale(0%); opacity: 1; }
+
+        /* Socials */
+        .social-box { text-align: center; align-items: center; cursor: pointer; }
+        .social-box.insta:hover { border-color: #E1306C; box-shadow: 0 0 30px rgba(225, 48, 108, 0.2); }
+        .social-box.tiktok:hover { border-color: #00f2ea; box-shadow: 0 0 30px rgba(0, 242, 234, 0.2); }
+
+        /* Address Box */
+        .address-box { grid-column: span 1; justify-content: flex-start; }
+
+        /* Footer */
+        .site-footer { border-top: 1px solid var(--border); padding: 50px; text-align: center; margin-top: 50px; background: #050505; color: gray; }
+        .site-footer p { margin-bottom: 10px; }
+        .site-footer a { color: gray; text-decoration: none; transition: 0.3s; }
+        .site-footer a:hover { color: var(--accent); }
+        .credit { margin-top: 20px; font-size: 0.8rem; }
+        .credit a { color: var(--accent); }
+
+        @media (max-width: 1024px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .map-box { grid-column: span 1; height: 300px; }
+            .address-box { grid-column: span 1; }
+            .page-title { font-size: 15vw; }
+            .nav-links { display: none; }
+            .toggle-btn { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+
+    <nav>
+        <a href="/index.html" class="logo">SIGMA PUMPY</a>
+        <div class="nav-links">
+            <a href="/index.html">Domů</a>
+            <a href="/produkty/index.html">Produkty</a>
+            <a href="/kontakt/" class="active">Kontakt</a>
+            <a href="/o-nas/">O nás</a>
+            <div class="cart-wrapper">
+                <a href="/kosik/index.html" class="cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+        <div class="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="dropdown_menu">
+        <a href="/index.html">Domů</a>
+        <a href="/produkty/index.html">Produkty</a>
+        <a href="/kontakt/">Kontakt</a>
+        <a href="/o-nas/">O nás</a>
+        <a href="/kosik/index.html">Košík (<span class="cart-count-mobile" id="cart-count-mobile">0</span>)</a>
+    </div>
+
+    <header class="page-header">
+        <h1 class="page-title">GET IN</h1>
+        <h1 class="page-title filled">TOUCH</h1>
+    </header>
+
+    <section class="contact-container">
+        <div class="contact-grid">
+            
+            <div class="contact-box">
+                <i class="fas fa-envelope contact-icon"></i>
+                <h2>Email</h2>
+                <a href="mailto:sigmapumpyindustries@gmail.com">sigmapumpyindustries@gmail.com</a>
+            </div>
+
+            <div class="contact-box">
+                <i class="fas fa-phone contact-icon"></i>
+                <h2>Telefon</h2>
+                <a href="tel:+420545878122">+420 545 878 122</a>
+            </div>
+
+            <a href="https://www.instagram.com/sigma_pumpy.cz/" target="_blank" class="contact-box social-box insta">
+                <i class="fab fa-instagram contact-icon" style="color: white;"></i>
+                <h2>Instagram</h2>
+                <p>@Sigma_Pumpy.cz</p>
+            </a>
+
+            <div class="contact-box map-box">
+                
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2558.8553631899993!2d14.512613976865242!3d50.1082599715291!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b932822a9463f%3A0x643666d66937f198!2sKolbenova%20946%2F7b%2C%20190%2000%20Praha%209-Vyso%C4%8Dany!5e0!3m2!1scs!2scz!4v1716300000000!5m2!1scs!2scz" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <div class="contact-box address-box">
+                <i class="fas fa-map-marker-alt contact-icon"></i>
+                <h2>Adresa</h2>
+                <p>Kolbenova 946/7b<br>190 00 Praha 9<br>Vysočany</p>
+                <a href="https://www.tiktok.com/" target="_blank" style="margin-top: 30px; display: block; font-size: 1rem; color: #aaa;">
+                    <i class="fab fa-tiktok"></i> Sledujte nás také na TikToku
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div id="footer-content">
+            <p>© 2024 Sigma Pumpy Industries</p>
+            <a href="/cookies/"><p>Používáme soubory cookies</p></a>
+            <div class="credit">
+                <p>Created with ❤️ by <a href="https://martyc.eu">martyc.eu</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Header Animation
+        gsap.from(".page-title", { y: 100, opacity: 0, duration: 1.5, stagger: 0.2, ease: "power4.out" });
+
+        // Grid Animation
+        gsap.utils.toArray('.contact-box').forEach((box, i) => {
+            gsap.from(box, {
+                scrollTrigger: { trigger: box, start: "top 90%" },
+                y: 50, opacity: 0, duration: 0.8, delay: i * 0.1, ease: "power2.out"
+            });
+        });
+
+        // Menu Logic
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const toggleBtnIcon = document.querySelector('.toggle-btn i');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+            toggleBtnIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        }
+    </script>
+</body>
+</html>

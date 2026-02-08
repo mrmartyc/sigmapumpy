@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA PUMPY | 404 Nenalezeno</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        /* --- SDÍLENÉ STYLY --- */
+        :root { --bg-color: #0b0b0b; --text-color: #ffffff; --accent: #00f2ea; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Syne', sans-serif; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+        /* NAVIGACE */
+        nav { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1400px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 50px; z-index: 100; }
+        .logo { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; color: white; text-decoration: none; z-index: 101; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.9rem; text-transform: uppercase; font-weight: 700; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        .cart-wrapper { position: relative; }
+        .cart-link { color: var(--accent); font-size: 1.2rem; }
+        .cart-count { position: absolute; top: -8px; right: -10px; background: red; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
+        .toggle-btn { display: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 101; }
+
+        /* Fullscreen Menu */
+        .dropdown_menu { position: fixed; top: 0; left: 0; width: 100%; height: 0; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px); z-index: 99; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: height 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .dropdown_menu.open { height: 100vh; }
+        .dropdown_menu a { color: white; font-family: 'Oswald', sans-serif; font-size: 3rem; text-decoration: none; text-transform: uppercase; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .dropdown_menu.open a { opacity: 1; transform: translateY(0); }
+        .dropdown_menu a:hover { color: var(--accent); -webkit-text-stroke: 1px var(--accent); }
+
+        /* --- 404 SPECIFIC STYLES --- */
+        .error-main {
+            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; height: 80vh; margin-top: 80px; padding: 0 20px;
+        }
+
+        .error-code {
+            font-family: 'Oswald', sans-serif; font-size: 25vw; line-height: 0.8;
+            color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.1);
+            position: relative; z-index: 1; user-select: none;
+        }
+
+        .error-message {
+            font-family: 'Oswald', sans-serif; font-size: 3rem; text-transform: uppercase;
+            color: var(--accent); margin-top: -20px; z-index: 2; text-shadow: 0 0 20px rgba(0, 242, 234, 0.3);
+        }
+
+        .error-desc {
+            color: #aaa; font-size: 1.2rem; max-width: 600px; margin: 20px auto 40px auto;
+        }
+
+        .btn-home {
+            padding: 15px 40px; background: var(--accent); color: #000; text-decoration: none;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border-radius: 50px;
+            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
+        }
+
+        .btn-home:hover {
+            transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 242, 234, 0.6); background: white;
+        }
+
+        /* Footer */
+        .site-footer { border-top: 1px solid var(--border); padding: 50px; text-align: center; margin-top: auto; background: #050505; color: gray; }
+        .site-footer p { margin-bottom: 10px; }
+        .site-footer a { color: gray; text-decoration: none; transition: 0.3s; }
+        .site-footer a:hover { color: var(--accent); }
+        .credit { margin-top: 20px; font-size: 0.8rem; }
+        .credit a { color: var(--accent); }
+
+        @media (max-width: 1024px) {
+            .error-code { font-size: 35vw; }
+            .error-message { font-size: 2rem; margin-top: 10px; }
+            .nav-links { display: none; }
+            .toggle-btn { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+
+    <nav>
+        <a href="/index.html" class="logo">SIGMA PUMPY</a>
+        <div class="nav-links">
+            <a href="/index.html">Domů</a>
+            <a href="/produkty/index.html">Produkty</a>
+            <a href="/kontakt/index.html">Kontakt</a>
+            <a href="/o-nas/index.html">O nás</a>
+            <div class="cart-wrapper">
+                <a href="/kosik/index.html" class="cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+        <div class="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="dropdown_menu">
+        <a href="/index.html">Domů</a>
+        <a href="/produkty/index.html">Produkty</a>
+        <a href="/kontakt/index.html">Kontakt</a>
+        <a href="/o-nas/index.html">O nás</a>
+        <a href="/kosik/index.html">Košík (<span class="cart-count-mobile" id="cart-count-mobile">0</span>)</a>
+    </div>
+
+    <main class="error-main">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-message">DOŠLA ŠŤÁVA?</h2>
+        <p class="error-desc">Vypadá to, že jste zabloudili mimo trať. Tahle stránka nemá žádnou energii. Vraťte se na start a doplňte palivo.</p>
+        
+        <a href="/index.html" class="btn-home">
+            <i class="fas fa-arrow-left"></i> Zpět na start
+        </a>
+    </main>
+
+    <footer class="site-footer">
+        <div id="footer-content">
+            <p>© 2024 Sigma Pumpy Industries</p>
+            <a href="/cookies/"><p>Používáme soubory cookies</p></a>
+            <div class="credit">
+                <p>Created with ❤️ by <a href="https://martyc.eu">martyc.eu</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // GSAP Animace při načtení
+        gsap.from(".error-code", {
+            scale: 0.5, opacity: 0, duration: 1.5, ease: "elastic.out(1, 0.3)"
+        });
+        
+        gsap.from(".error-message", {
+            y: 50, opacity: 0, duration: 1, delay: 0.5, ease: "power2.out"
+        });
+
+        gsap.from(".error-desc, .btn-home", {
+            y: 30, opacity: 0, duration: 1, delay: 0.8, stagger: 0.2, ease: "power2.out"
+        });
+
+        // Menu Logic
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const toggleBtnIcon = document.querySelector('.toggle-btn i');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+            toggleBtnIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        }
+    </script>
+</body>
+</html>
